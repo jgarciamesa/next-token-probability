@@ -7,10 +7,10 @@ import torch
 import time
 import os
 
-os.environ['HUGGINGFACE_HUB_CACHE'] = "/scratch/jgarc111/.cache/"
+os.environ['HUGGINGFACE_HUB_CACHE'] = "/scratch/dshah47/.cache/"
 
 def load_model(llm):
-    model_id = os.environ['HUGGINGFACE_HUB_CACHE'] + llm
+    model_id = os.environ['HUGGINGFACE_HUB_CACHE'] + 'licensed_models/' + llm
     
     tokenizer = AutoTokenizer.from_pretrained(model_id)
     
@@ -24,7 +24,7 @@ def load_model(llm):
 
 def setup_inputs(question, tokenizer):
     system_prompt = "You are an expert asked to classify text from a patent according to why the inventor may have used a scientific article in their invention. I will give you a chunk of text from a patent, and a reference that appears in the chunk. You will respond with ONE WORD ONLY: return 'Tool' if you believe the reference was used by a tool or technique by the inventor to make the invention, or 'Background' if it is general background knowledge, an unsolved problem the invention will tackle, a reason the invention was created, or a potential use case. Remember, reply ONLY with Tool or Background."
-    prompt = f"<|begin_of_text|><|start_header_id|>system<|end_header_id|>{system_prompt}<|eot_id|><|start_header_id|>user<|end_header_id|>Text:{question}<|eot_id|><|start_header_id|>Expert: <|end_header_id|>"
+    prompt = f"[INST]<<SYS>>{system_prompt}<</SYS>> Question: {question} Answer:[/INST]"
 
     inputs = tokenizer([prompt],
                    return_tensors="pt")
@@ -52,9 +52,7 @@ def next_token(model, tokenizer, question):
         output_scores=True,
         do_sample=True,
         kwargs={"temperature": 0},
-        eos_token_id=tokenizer.eos_token_id,
-        pad_token_id=tokenizer.eos_token_id,
-        bos_token_id=tokenizer.bos_token_id
+        pad_token_id=tokenizer.eos_token_id
     )
     transition_scores = model.compute_transition_scores(
         output.sequences,
@@ -96,9 +94,9 @@ def main(csv_file, llm, reps):
                                                        patent_data.iloc[i,1],
                                                        reps)
         if i % 20 == 0:
-            patent_data.to_csv("results/" + os.path.basename(csv_file),
+            patent_data.to_csv("results/llama2-" + os.path.basename(csv_file),
                     index=False)
-    patent_data.to_csv("results/" + os.path.basename(csv_file),
+    patent_data.to_csv("results/llama2-" + os.path.basename(csv_file),
                       index=False)
                                                   
 
