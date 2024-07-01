@@ -94,9 +94,9 @@ def main(csv_file, llm, reps):
                                                        patent_data.iloc[i,1],
                                                        reps)
         if i % 20 == 0:
-            patent_data.to_csv("results/" + os.path.basename(csv_file),
+            patent_data.to_csv("results/llama2-" + os.path.basename(csv_file),
                     index=False)
-    patent_data.to_csv("results/" + os.path.basename(csv_file),
+    patent_data.to_csv("results/llama2-" + os.path.basename(csv_file),
                       index=False)
                                                   
 

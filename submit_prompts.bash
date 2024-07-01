@@ -1,7 +1,7 @@
 #!/bin/bash
 
 #SBATCH -N 1            # number of nodes
-#SBATCH -c 2            # number of cores 
+#SBATCH -c 4            # number of cores 
 #SBATCH -t 0-01:00:00   # time in d-hh:mm:ss
 #SBATCH -p htc          # partition 
 #SBATCH -q public       # QOS
@@ -20,4 +20,6 @@ module load mamba/latest
 #Activate our environment
 source activate genai23.10
 
-python scripts/patent_classification_llm.py data/patent_classification_data.csv Llama3-8b-instruct
+script=$1
+llm=$2
+python ${script} data/patent_classification_data.csv ${llm}
