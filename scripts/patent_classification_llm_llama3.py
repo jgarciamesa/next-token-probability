@@ -7,10 +7,10 @@ import torch
 import time
 import os
 
-os.environ['HUGGINGFACE_HUB_CACHE'] = "/scratch/jgarc111/.cache/"
+os.environ['HUGGINGFACE_HUB_CACHE'] = "/scratch/dshah47/.cache/"
 
 def load_model(llm):
-    model_id = os.environ['HUGGINGFACE_HUB_CACHE'] + llm
+    model_id = os.environ['HUGGINGFACE_HUB_CACHE'] + 'licensed_models/' + llm
     
     tokenizer = AutoTokenizer.from_pretrained(model_id)
     
