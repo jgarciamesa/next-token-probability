@@ -5,7 +5,7 @@
 #SBATCH -t 0-01:00:00   # time in d-hh:mm:ss
 #SBATCH -p htc          # partition 
 #SBATCH -q public       # QOS
-#SBATCH --gres=gpu:a100:2
+#SBATCH --gres=gpu:a100:3
 #SBATCH -Ca100_80
 #SBATCH --mem=24GB
 #SBATCH -o slurm.%j.out # file to save job's STDOUT (%j = JobId)
